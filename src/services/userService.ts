@@ -15,7 +15,12 @@ async function createUser(user: iUser) {
 
 	const SALT = 10;
 	const hashedPassword = bcrypt.hashSync(user.password, SALT);
-	await userRepository.insertUser({ ...user, password: hashedPassword });
+
+	const dataUser = {
+		email: user.email,
+		password: hashedPassword,
+	};
+	await userRepository.insertUser(dataUser);
 }
 
 async function login(user: iUser) {
