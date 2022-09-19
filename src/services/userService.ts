@@ -43,9 +43,19 @@ async function login(user: iUser) {
 	return token;
 }
 
+async function findUserById(id: number) {
+	const user = await userRepository.findUserById(id);
+	if (!user) {
+		throw { type: "notFound", message: "user not found" };
+	}
+
+	return user;
+}
+
 const userService = {
 	createUser,
 	login,
+	findUserById,
 };
 
 export default userService;

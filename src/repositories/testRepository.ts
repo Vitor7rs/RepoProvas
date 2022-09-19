@@ -7,8 +7,49 @@ async function insertTest(test: iTest) {
 	});
 }
 
+async function getTestsByDiscipline() {
+	const tests = await prisma.term.findMany({
+		include: {
+			disciplines: {
+				include: {
+					teacherDisciplines: {
+						include: {
+							teacher: true,
+							tests: {
+								include: {
+									category: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	});
+
+	return tests;
+}
+
+async function getTestsByTeachers() {
+	const tests = await prisma.teachersDisciplines.findMany({
+		include: {
+			teacher: true,
+			discipline: true,
+			tests: {
+				include: {
+					category: true,
+				},
+			},
+		},
+	});
+
+	return tests;
+}
+
 const testRepository = {
 	insertTest,
+	getTestsByDiscipline,
+	getTestsByTeachers,
 };
 
 export default testRepository;
